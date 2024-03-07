@@ -6,10 +6,11 @@ export const routerUser = express.Router();
 
 // credenciales de la bd
 const credentials = {
-  host: "localhost",
+  host: "mysqldb",
   user: "root",
-  password: "",
+  password: "gonza123",
   database: "gonzalodb",
+  port: 3306,
 };
 
 // conexion a la base de datos
@@ -26,15 +27,6 @@ routerUser.get("/", (req, res) => {
   });
 });
 
-// mostrar usuario individualmente
-routerUser.get("/:id", (request, response) => {
-  const id = request.params.id;
-  connection.query("SELECT * FROM users WHERE id = ?", id, (error, result) => {
-    if (error) throw error;
-    response.send(result);
-  });
-});
-
 // crear usuarios
 routerUser.post("/", (request, response) => {
   const { first_name, email, password } = request.body;
@@ -48,6 +40,15 @@ routerUser.post("/", (request, response) => {
         .json({ "Item añadido correctamente": results.affectedRows });
     }
   );
+});
+
+// mostrar usuario individualmente
+routerUser.get("/:id", (request, response) => {
+  const id = request.params.id;
+  connection.query("SELECT * FROM users WHERE id = ?", id, (error, result) => {
+    if (error) throw error;
+    response.send(result);
+  });
 });
 
 // actualizar usuario por id
